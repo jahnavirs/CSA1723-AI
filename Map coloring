@@ -1,0 +1,34 @@
+# Regions and their neighbors
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B', 'D', 'E'],
+    'D': ['B', 'C', 'E'],
+    'E': ['C', 'D']
+}
+
+colors = ['Red', 'Green', 'Blue']
+solution = {}
+
+def is_safe(region, color):
+    for neighbor in graph[region]:
+        if solution.get(neighbor) == color:
+            return False
+    return True
+
+def solve(region_list, index=0):
+    if index == len(region_list):
+        return True
+    region = region_list[index]
+    for color in colors:
+        if is_safe(region, color):
+            solution[region] = color
+            if solve(region_list, index + 1):
+                return True
+            del solution[region]
+    return False
+
+if solve(list(graph.keys())):
+    print("Solution:", solution)
+else:
+    print("No solution found.")
