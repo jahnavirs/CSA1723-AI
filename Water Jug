@@ -1,0 +1,25 @@
+from collections import deque
+
+def water_jug(jug1, jug2, target):
+    visited = set()
+    q = deque([(0, 0)])
+
+    while q:
+        x, y = q.popleft()
+        if x == target or y == target:
+            print(f"Reached: ({x}, {y})")
+            return True
+        if (x, y) in visited:
+            continue
+        visited.add((x, y))
+        
+        q.extend([
+            (jug1, y), (x, jug2),  # fill
+            (0, y), (x, 0),        # empty
+            (min(x + y, jug1), y - (min(x + y, jug1) - x)),  # y to x
+            (x - (min(x + y, jug2) - y), min(x + y, jug2))   # x to y
+        ])
+    return False
+
+# Example: Jug1 = 4L, Jug2 = 3L, Target = 2L
+water_jug(4, 3, 2)
