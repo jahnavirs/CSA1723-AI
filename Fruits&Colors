@@ -1,0 +1,9 @@
+% fruit_color(Fruit, Color)
+fruit_color(apple, red).
+fruit_color(banana, yellow).
+fruit_color(grape, purple).
+fruit_color(orange, orange).
+fruit_color(watermelon, green).
+fruit_color(blueberry, blue).
+fruit_color(lemon, yellow).
+fruit_color(guava, green).
