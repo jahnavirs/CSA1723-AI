@@ -1,0 +1,47 @@
+% --- Graph edges: edge(Node, Neighbor, Cost) ---
+edge(a, b, 1).
+edge(a, c, 3).
+edge(b, d, 3).
+edge(b, e, 1).
+edge(c, f, 5).
+edge(e, g, 2).
+edge(d, g, 4).
+edge(f, g, 2).
+
+% --- Heuristic values: h(Node, HeuristicValue) ---
+h(a, 6).
+h(b, 4).
+h(c, 5).
+h(d, 3).
+h(e, 2).
+h(f, 6).
+h(g, 0).  % Goal node has heuristic = 0
+
+% --- Best-First Search ---
+best_first_search(Start, Goal, Path) :-
+    bfs([[Start]], Goal, Path).
+
+% Base case: if first node is goal
+bfs([[Goal | Rest] | _], Goal, Path) :-
+    reverse([Goal | Rest], Path).
+
+% Recursive case
+bfs([CurrentPath | OtherPaths], Goal, Path) :-
+    CurrentPath = [CurrentNode | _],
+    findall(
+        [NextNode | CurrentPath],
+        (edge(CurrentNode, NextNode, _), \+ member(NextNode, CurrentPath)),
+        NewPaths
+    ),
+    append(OtherPaths, NewPaths, TempPaths),
+    sort_paths(TempPaths, SortedPaths),  % Sort by heuristic
+    bfs(SortedPaths, Goal, Path).
+
+% --- Sort paths based on heuristic value of head node ---
+sort_paths(Paths, Sorted) :-
+    map_list_to_pairs(heuristic_of_path, Paths, Pairs),
+    keysort(Pairs, SortedPairs),
+    pairs_values(SortedPairs, Sorted).
+
+heuristic_of_path([Node | _], H) :-
+    h(Node, H).
