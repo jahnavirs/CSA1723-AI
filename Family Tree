@@ -1,0 +1,34 @@
+% Gender Facts
+male(john).
+male(mike).
+male(david).
+male(tom).
+
+female(susan).
+female(lily).
+female(anna).
+female(mary).
+
+% Parent Facts
+parent(john, mike).
+parent(susan, mike).
+parent(john, lily).
+parent(susan, lily).
+parent(mike, david).
+parent(anna, david).
+parent(mike, mary).
+parent(anna, mary).
+parent(tom, john).
+
+% Derived Rules
+father(X, Y) :- parent(X, Y), male(X).
+mother(X, Y) :- parent(X, Y), female(X).
+
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+grandfather(X, Y) :- grandparent(X, Y), male(X).
+grandmother(X, Y) :- grandparent(X, Y), female(X).
+
+sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+
+ancestor(X, Y) :- parent(X, Y).
+ancestor(X, Y) :- parent(X, Z), ancestor(Z, Y).
