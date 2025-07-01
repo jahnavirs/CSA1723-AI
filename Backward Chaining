@@ -1,0 +1,9 @@
+% --- Base facts ---
+fact(a).
+fact(b).
+fact(d).
+
+% --- Rules (If conditions are true, then conclusion is true) ---
+fact(c) :- fact(a), fact(b).
+fact(e) :- fact(c), fact(d).
+fact(goal) :- fact(e).
