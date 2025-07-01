@@ -1,0 +1,53 @@
+% --- Dynamic predicates to store known facts ---
+:- dynamic fact/1.
+
+% --- Sample Rules (If conditions are met, infer new fact) ---
+rule:-
+    fact(a),
+    fact(b),
+    \+ fact(c),      % if c is not already known
+    assert(fact(c)),
+    write('Inferred: c'), nl,
+    fail.
+
+rule:-
+    fact(c),
+    fact(d),
+    \+ fact(e),
+    assert(fact(e)),
+    write('Inferred: e'), nl,
+    fail.
+
+rule:-
+    fact(e),
+    \+ fact(goal),
+    assert(fact(goal)),
+    write('Goal reached!'), nl,
+    fail.
+
+% End rule execution
+rule.
+
+% --- Start Forward Chaining ---
+start :-
+    retractall(fact(_)),  % Clear all previous facts
+    write('Enter known facts (end with "done."):'), nl,
+    read_facts,
+    write('--- Starting forward chaining ---'), nl,
+    rule,
+    write('--- Final facts in the system ---'), nl,
+    list_facts.
+
+% --- Reading known facts from user ---
+read_facts :-
+    read(Fact),
+    (Fact == done -> true ;
+     assert(fact(Fact)),
+     read_facts).
+
+% --- List all current facts ---
+list_facts :-
+    fact(X),
+    write('- '), write(X), nl,
+    fail.
+list_facts.
