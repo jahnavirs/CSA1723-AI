@@ -1,0 +1,18 @@
+% --- Matching names with structure person(Name, Age) ---
+match_person(person(Name, Age)) :-
+    write('Matched person with name: '), write(Name), nl,
+    write('And age: '), write(Age), nl.
+
+% --- Matching lists: head and tail ---
+match_list([H|T]) :-
+    write('Head of list: '), write(H), nl,
+    write('Tail of list: '), write(T), nl.
+
+% --- Match specific pattern: [a, b | Rest] ---
+match_ab([a, b | Rest]) :-
+    write('List starts with a and b. Remaining: '), write(Rest), nl.
+
+% --- Match nested structure ---
+match_nested(pair(X, pair(Y, Z))) :-
+    write('First element: '), write(X), nl,
+    write('Nested pair: ('), write(Y), write(', '), write(Z), write(')'), nl.
