@@ -1,0 +1,45 @@
+% --- Symptom-Disease rules ---
+
+disease(flu) :-
+    symptom(fever),
+    symptom(cough),
+    symptom(sore_throat),
+    symptom(body_ache).
+
+disease(cold) :-
+    symptom(sneezing),
+    symptom(runny_nose),
+    symptom(sore_throat).
+
+disease(covid19) :-
+    symptom(fever),
+    symptom(cough),
+    symptom(loss_of_taste),
+    symptom(breathing_difficulty).
+
+disease(malaria) :-
+    symptom(fever),
+    symptom(chills),
+    symptom(sweating),
+    symptom(headache).
+
+disease(typhoid) :-
+    symptom(fever),
+    symptom(abdominal_pain),
+    symptom(weakness),
+    symptom(loss_of_appetite).
+
+% --- Ask the user about symptoms ---
+ask_symptom(Symptom) :-
+    format('Do you have ~w? (yes/no): ', [Symptom]),
+    read(Reply),
+    (Reply == yes -> assert(symptom(Symptom)); fail).
+
+% --- Start diagnosis ---
+start_diagnosis :-
+    retractall(symptom(_)),  % Clear previous session
+    (
+        disease(Disease) ->
+        format('~nYou might be suffering from: ~w~n', [Disease]);
+        write('~nNo matching disease found. Please consult a doctor.'), nl
+    ).
