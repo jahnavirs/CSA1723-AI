@@ -1,0 +1,33 @@
+% Initial state: monkey at door, box at window, monkey on floor, monkey does not have banana
+initial_state(state(at_door, at_window, on_floor, has_not)).
+
+% Goal state: monkey has banana
+goal_state(state(_, _, on_box, has)).
+
+% Possible actions
+move(state(X, B, on_floor, H), move(X, Y), state(Y, B, on_floor, H)).
+push(state(X, X, on_floor, H), push(X, Y), state(Y, Y, on_floor, H)).
+climb(state(X, X, on_floor, H), climb, state(X, X, on_box, H)).
+grasp(state(X, X, on_box, has_not), grasp, state(X, X, on_box, has)).
+
+% Plan: find sequence of actions from initial to goal
+plan(State, [], State).
+plan(State1, [Action | Rest], State3) :-
+    (move(State1, Action, State2);
+     push(State1, Action, State2);
+     climb(State1, Action, State2);
+     grasp(State1, Action, State2)),
+    plan(State2, Rest, State3).
+
+% Main entry point
+solve :-
+    initial_state(Initial),
+    goal_state(Goal),
+    plan(Initial, Plan, Goal),
+    write('Action Plan to get the banana:'), nl,
+    write_steps(Plan).
+
+write_steps([]).
+write_steps([H | T]) :-
+    write('- '), write(H), nl,
+    write_steps(T).
